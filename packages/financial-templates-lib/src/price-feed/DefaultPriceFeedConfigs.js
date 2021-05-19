@@ -952,6 +952,42 @@ const defaultConfigs = {
       },
     },
   },
+  ETHUSD: {
+    type: "medianizer",
+    minTimeBetweenUpdates: 60,
+    medianizedFeeds: [
+        { type: "cryptowatch", exchange: "coinbase-pro", pair: "ethusd" },
+        { type: "cryptowatch", exchange: "binance", pair: "ethusdt" },
+        { type: "cryptowatch", exchange: "kraken", pair: "ethusd" },
+    ],
+  },
+  iFARMUSD: {
+    type: "expression",
+    expression: `
+        FARMUSD = FARMETH_UNISWAP * ETHUSD;
+        FARMUSD * FARM_PER_SHARE
+    `,
+    lookback: 7200,
+    minTimeBetweenUpdates: 60,
+    customFeeds: {
+      FARMETH_UNISWAP: { type: "uniswap", uniswapAddress: "0x56feAccb7f750B997B36A68625C7C596F0B41A58", twapLength: 900 },
+      FARM_PER_SHARE: { type: "harvestvault", address: "0x1571eD0bed4D987fe2b498DdBaE7DFA19519F651" },
+    },
+  },
+  USDiFARM: {
+    type: "expression",
+    expression: `
+        FARMUSD = FARMETH_UNISWAP * ETHUSD;
+        FARMUSD * FARM_PER_SHARE
+    `,
+    invertPrice: true,
+    lookback: 7200,
+    minTimeBetweenUpdates: 60,
+    customFeeds: {
+      FARMETH_UNISWAP: { type: "uniswap", uniswapAddress: "0x56feAccb7f750B997B36A68625C7C596F0B41A58", twapLength: 900 },
+      FARM_PER_SHARE: { type: "harvestvault", address: "0x1571eD0bed4D987fe2b498DdBaE7DFA19519F651" },
+    },
+  },
 };
 
 // Pull in the number of decimals for each identifier from the common getPrecisionForIdentifier. This is used within the
