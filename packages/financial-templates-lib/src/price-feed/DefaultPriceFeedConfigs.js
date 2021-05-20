@@ -970,7 +970,7 @@ const defaultConfigs = {
     lookback: 7200,
     minTimeBetweenUpdates: 60,
     customFeeds: {
-      FARMETH_UNISWAP: { type: "uniswap", uniswapAddress: "0x56feAccb7f750B997B36A68625C7C596F0B41A58", twapLength: 900 },
+      FARMETH_UNISWAP: { type: "uniswap", address: "0x56feAccb7f750B997B36A68625C7C596F0B41A58", twapLength: 900 },
       FARM_PER_SHARE: { type: "harvestvault", address: "0x1571eD0bed4D987fe2b498DdBaE7DFA19519F651" },
     },
   },
@@ -985,7 +985,7 @@ const defaultConfigs = {
     minTimeBetweenUpdates: 60,
     customFeeds: {
       FARMETH_UNISWAP: { type: "uniswap", uniswapAddress: "0x56feAccb7f750B997B36A68625C7C596F0B41A58", twapLength: 900 },
-      FARM_PER_SHARE: { type: "harvestvault", address: "0x1571eD0bed4D987fe2b498DdBaE7DFA19519F651" },
+      FARM_PER_SHARE: { type: "harvestvault", uniswapAddress: "0x1571eD0bed4D987fe2b498DdBaE7DFA19519F651" },
     },
   },
 };
