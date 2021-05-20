@@ -1,6 +1,6 @@
 const winston = require("winston");
 
-const { HarvestVaultPriceFeed } = require("../../src/price-feed/HarvestVaultPriceFeed");
+const { HarvestVaultPriceFeed } = require("../../src/price-feed/VaultPriceFeed");
 const { advanceBlockAndSetTime, parseFixed } = require("@uma/common");
 const { BlockFinder } = require("../../src/price-feed/utils");
 const { getTruffleContract } = require("@uma/core");
@@ -34,7 +34,7 @@ contract("HarvestVaultPriceFeed.js", function(accounts) {
       logger: dummyLogger,
       web3,
       getTime: () => mockTime,
-      harvestVaultAbi: VaultInterface.abi,
+      vaultAbi: VaultInterface.abi,
       erc20Abi: ERC20Interface.abi,
       vaultAddress: vaultMock.address,
       priceFeedDecimals
@@ -123,7 +123,7 @@ contract("HarvestVaultPriceFeed.js", function(accounts) {
       logger: dummyLogger,
       web3,
       getTime: () => mockTime,
-      harvestVaultAbi: VaultInterface.abi,
+      vaultAbi: VaultInterface.abi,
       erc20Abi: ERC20Interface.abi,
       vaultAddress: vaultMock.address,
       priceFeedDecimals,
