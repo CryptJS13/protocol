@@ -49,6 +49,8 @@ function createTransports(transportsConfig = {}) {
       transports.push(DiscordTransport.createDiscordTransport(discordWebHook));
     }
 
+    console.log("Transports:");
+    console.log(transports);
 
     // If there is a Pagerduty API key then add the pagerduty winston transport.
     if (transportsConfig.pdApiToken || process.env.PAGERDUTY_API_KEY) {
