@@ -65,8 +65,6 @@ function botIdentifyFormatter(botIdentifier) {
 }
 
 function createNewLogger(injectedTransports = [], transportsConfig = {}, botIdentifier = process.env.BOT_IDENTIFIER) {
-  console.log("Transports Config:");
-  console.log(transportsConfig);
   return winston.createLogger({
     level: "debug",
     format: winston.format.combine(

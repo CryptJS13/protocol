@@ -127,41 +127,16 @@ class DiscordHook extends Transport {
     let errorThrown = false;
     // If the overall payload is less than 3000 chars then we can send it all in one go to the slack API.
     if (JSON.stringify(payload).length < 2000) {
-      let test = await this.axiosInstance.post(this.webhookUrl, {content: "TEST1 TEST1 TEST1"});
-      if (test.status != 200) errorThrown = true;
       let response = await this.axiosInstance.post(this.webhookUrl, payload);
       if (response.status != 200) errorThrown = true;
     } else {
-      let test = await this.axiosInstance.post(this.webhookUrl, {content: "TEST2 TEST2 TEST2"});
-      if (test.status != 200) errorThrown = true;
       // If it's more than 3000 chars then we need to split the message sent to slack API into multiple calls.
-      let messageIndex = 0;
-      let processedBlocks = [[]];
-      for (let block of payload.blocks) {
-        if (JSON.stringify(block).length > 3000) {
-          // If the block (one single part of a message) is larger than 3000 chars then we must redact part of the message.
-          const stringifiedBlock = JSON.stringify(block);
-          const redactedBlock =
-            stringifiedBlock.substr(0, 1400) +
-            "-MESSAGE REDACTED DUE TO LENGTH-" +
-            stringifiedBlock.substr(stringifiedBlock.length - 1400, stringifiedBlock.length);
-          block = JSON.parse(redactedBlock);
-        }
-        if (JSON.stringify([...processedBlocks[messageIndex], block]).length > 3000) {
-          // If the set blocks is larger than 3000 then we must increment the message index, to enable sending the set
-          // of messages over multiple calls to the slack API. The amounts to splitting up one Winston log into multiple
-          // slack messages with no single slack message exceeding the 3000 char limit.
-          messageIndex += 1;
-        }
-        if (!processedBlocks[messageIndex]) processedBlocks[messageIndex] = [];
-        processedBlocks[messageIndex].push(block);
-      }
-      // Iterate over each message to send and generate a axios call for each message.
-      for (const processedBlock of processedBlocks) {
-        payload.blocks = processedBlock;
-        let response = await this.axiosInstance.post(this.webhookUrl, payload);
-        if (response.status != 200) errorThrown = true;
-      }
+      const stringifiedPayload = JSON.stringify(payload);
+      const redactedPayload =
+        stringifiedPayload.substr(0, 900) +
+        "-MESSAGE REDACTED DUE TO LENGTH-" +
+        stringifiedBlock.substr(stringifiedBlock.length - 900, stringifiedBlock.length);
+      payload = JSON.parse(redactedPayload);
     }
     callback();
     if (errorThrown) console.error("discord transport error!");

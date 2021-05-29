@@ -45,12 +45,8 @@ function createTransports(transportsConfig = {}) {
     // If there is a discord web hook, add to the transports array to enable discord messages.
     const discordWebHook = transportsConfig.discordWebHook ? transportsConfig.discordWebHook : process.env.DISCORD_WEBHOOK;
     if (discordWebHook) {
-      console.log(discordWebHook);
       transports.push(DiscordTransport.createDiscordTransport(discordWebHook));
     }
-
-    console.log("Transports:");
-    console.log(transports);
 
     // If there is a Pagerduty API key then add the pagerduty winston transport.
     if (transportsConfig.pdApiToken || process.env.PAGERDUTY_API_KEY) {
