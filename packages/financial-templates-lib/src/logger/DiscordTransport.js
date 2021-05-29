@@ -114,7 +114,10 @@ class DiscordHook extends Transport {
   }
 
   async log(info, callback) {
+    console.log("Check check check!");
     let layout = this.formatter(info);
+    console.log("Layout:");
+    console.log(layout);
     payload.content = layout.content || undefined;
     payload.embeds = layout.embeds || undefined;
     console.log("Payload Discord:");
