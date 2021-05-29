@@ -7,6 +7,7 @@ const ConsoleTransport = require("./ConsoleTransport");
 const JsonTransport = require("./JsonTransport");
 const SlackTransport = require("./SlackTransport");
 const PagerDutyTransport = require("./PagerDutyTransport");
+const DiscordTransport = require("./DiscordTransport");
 
 require("dotenv").config();
 const argv = require("minimist")(process.argv.slice(), {});
@@ -40,6 +41,13 @@ function createTransports(transportsConfig = {}) {
     if (slackWebHook) {
       transports.push(SlackTransport.createSlackTransport(slackWebHook));
     }
+
+    // If there is a discord web hook, add to the transports array to enable discord messages.
+    const discordWebHook = transportsConfig.discordWebHook ? transportsConfig.discordWebHook : process.env.DISCORD_WEBHOOK;
+    if (discordWebHook) {
+      transports.push(DiscordTransport.createDiscordTransport(discordWebHook));
+    }
+
 
     // If there is a Pagerduty API key then add the pagerduty winston transport.
     if (transportsConfig.pdApiToken || process.env.PAGERDUTY_API_KEY) {
