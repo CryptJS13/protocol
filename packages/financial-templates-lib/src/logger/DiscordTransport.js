@@ -89,7 +89,7 @@ function discordFormatter(info) {
         formattedResponse.content += ` • _${key}_: null`;
       }
     }
-    console.log("Formatted Response:");
+    console.log("Formatted Response Discord:");
     console.log(formattedResponse);
     return formattedResponse;
   } catch (error) {
@@ -124,9 +124,9 @@ class DiscordHook extends Transport {
     let layout = this.formatter(info);
     payload.content = layout.content || undefined;
     payload.embeds = layout.embeds || undefined;
-    console.log("Payload:");
+    console.log("Payload Discord:");
     console.log(payload);
-    console.log("Message length:", JSON.stringify(payload).length < 2000);
+    console.log("Message length Discord:", JSON.stringify(payload).length);
     let errorThrown = false;
     // If the overall payload is less than 3000 chars then we can send it all in one go to the slack API.
     if (JSON.stringify(payload).length < 2000) {

@@ -145,6 +145,8 @@ function slackFormatter(info) {
     formattedResponse.blocks.push({
       type: "divider",
     });
+    console.log("Formatted Response Slack:");
+    console.log(formattedResponse);
     return formattedResponse;
   } catch (error) {
     return {
@@ -187,6 +189,7 @@ class SlackHook extends Transport {
     payload.blocks = layout.blocks || undefined;
     console.log("Payload Slack:");
     console.log(payload);
+    console.log("Message length Slack:", JSON.stringify(payload).length);
     let errorThrown = false;
     // If the overall payload is less than 3000 chars then we can send it all in one go to the slack API.
     if (JSON.stringify(payload).length < 3000) {
