@@ -45,6 +45,7 @@ function createTransports(transportsConfig = {}) {
     // If there is a discord web hook, add to the transports array to enable discord messages.
     const discordWebHook = transportsConfig.discordWebHook ? transportsConfig.discordWebHook : process.env.DISCORD_WEBHOOK;
     if (discordWebHook) {
+      console.log("CHECK1!");
       transports.push(DiscordTransport.createDiscordTransport(discordWebHook));
     }
 
