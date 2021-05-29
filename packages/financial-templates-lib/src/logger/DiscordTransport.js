@@ -93,18 +93,10 @@ function discordFormatter(info) {
     console.log(formattedResponse);
     return formattedResponse;
   } catch (error) {
-    console.log("ERROR ERROR ERROR!");
     return {
-      blocks: [
-        {
-          type: "section",
-          text: {
-            text: `*Something went wrong in the winston formatter!*\n\nError:${error}\n\nlogInfo:${JSON.stringify(
+      content: `*Something went wrong in the winston formatter!*\n\nError:${error}\n\nlogInfo:${JSON.stringify(
               info
-            )}`,
-          },
-        },
-      ],
+      )}`,
     };
   }
 }
