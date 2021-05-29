@@ -89,6 +89,7 @@ function discordFormatter(info) {
         formattedResponse.content += ` • _${key}_: null`;
       }
     }
+    console.log(formattedResponse);
     return formattedResponse;
   } catch (error) {
     return {
