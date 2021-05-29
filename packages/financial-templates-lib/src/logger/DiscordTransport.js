@@ -33,7 +33,7 @@ function discordFormatter(info) {
     // All slack responses start with the heading level and where the message came from.
     let formattedResponse = {
       // If the bot contains an identifier flag it should be included in the heading.
-      content: `[${info.level}] *${info["bot-identifier"]}* (${info.at})->\n`,
+      content: `[${info.level}] *${info["bot-identifier"]}* (${info.at})⭢${info.message}\n`,
     };
     // All messages from winston come in as a Json object. The loop below expands this object and adds mrkdwn sections
     // for each key value pair with a bullet point. If the section is an object then it was passed containing multiple
@@ -55,11 +55,11 @@ function discordFormatter(info) {
         for (const subKey in info[key]) {
           // If the length of the value is 66 then we know this is a transaction hash. Format accordingly.
           if (info[key][subKey].length == 66) {
-            formattedResponse.content += `    - _tx_: ${createEtherscanLinkMarkdown(info[key][subKey])}\n`;
+            formattedResponse.content += `    - _tx_: <${createEtherscanLinkFromtx(1)}tx/${info[key][subKey]}>\n`;
           }
           // If the length of the value is 42 then we know this is an address. Format accordingly.
           else if (info[key][subKey].length == 42) {
-            formattedResponse.content += `    - _${subKey}_: ${createEtherscanLinkMarkdown(info[key][subKey])}\n`;
+            formattedResponse.content += `    - _${subKey}_: <${createEtherscanLinkFromtx(1)}address/${info[key][subKey]}>\n`;
           }
           // If the value within the object itself is an object we dont want to spread it any further. Rather,
           // convert the object to a string and print it along side it's key value pair.
