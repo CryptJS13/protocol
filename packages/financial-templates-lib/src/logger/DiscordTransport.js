@@ -86,7 +86,7 @@ function discordFormatter(info) {
         // Else, if the value from the key value pair is null still show the key in the log. For example if a param is
         // logged but empty we still want to see the key.
       } else if (info[key] == null) {
-        formattedResponse.content += ` • _${key}_: null`;
+        formattedResponse.content += ` • _${key}_: null \n`;
       }
     }
     console.log("Formatted Response Discord:");
@@ -114,6 +114,7 @@ class DiscordHook extends Transport {
   }
 
   async log(info, callback) {
+    let payload = {};
     console.log("Check check check!");
     let layout = this.formatter(info);
     console.log("Layout:");
