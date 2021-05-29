@@ -170,7 +170,7 @@ class DiscordHook extends Transport {
 
 function createDiscordTransport(webHookUrl) {
   return new DiscordHook({
-    level: "info",
+    level: "debug",
     webhookUrl: webHookUrl,
     formatter: (info) => {
       return discordFormatter(info);
