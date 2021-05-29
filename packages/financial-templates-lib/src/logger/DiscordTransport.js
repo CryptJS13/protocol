@@ -33,7 +33,7 @@ function discordFormatter(info) {
     // All slack responses start with the heading level and where the message came from.
     let formattedResponse = {
       // If the bot contains an identifier flag it should be included in the heading.
-      content: `[${info.level}] *${info["bot-identifier"]}* (${info.at})⭢${info.message}\n`;
+      content: `[${info.level}] *${info["bot-identifier"]}* (${info.at})⭢${info.message}\n`,
     };
     // All messages from winston come in as a Json object. The loop below expands this object and adds mrkdwn sections
     // for each key value pair with a bullet point. If the section is an object then it was passed containing multiple
