@@ -22,7 +22,7 @@
 //    The amount is a string value. This is shown as a bullet point item.
 const Transport = require("winston-transport");
 const axios = require("axios").default;
-const { createEtherscanLinkMarkdown } = require("@uma/common");
+const { createEtherscanLinkFromtx } = require("@uma/common");
 
 function discordFormatter(info) {
   try {
