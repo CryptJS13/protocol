@@ -93,6 +93,7 @@ function discordFormatter(info) {
     console.log(formattedResponse);
     return formattedResponse;
   } catch (error) {
+    console.log("ERROR ERROR ERROR!");
     return {
       blocks: [
         {
