@@ -127,11 +127,13 @@ class DiscordHook extends Transport {
     let errorThrown = false;
     // If the overall payload is less than 3000 chars then we can send it all in one go to the slack API.
     if (JSON.stringify(payload).length < 2000) {
-      let test = await this.axiosInstance.post(this.webhookUrl, {content: "TEST TEST TEST"});
+      let test = await this.axiosInstance.post(this.webhookUrl, {content: "TEST1 TEST1 TEST1"});
       if (test.status != 200) errorThrown = true;
       let response = await this.axiosInstance.post(this.webhookUrl, payload);
       if (response.status != 200) errorThrown = true;
     } else {
+      let test = await this.axiosInstance.post(this.webhookUrl, {content: "TEST2 TEST2 TEST2"});
+      if (test.status != 200) errorThrown = true;
       // If it's more than 3000 chars then we need to split the message sent to slack API into multiple calls.
       let messageIndex = 0;
       let processedBlocks = [[]];
