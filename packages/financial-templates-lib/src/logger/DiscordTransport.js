@@ -33,14 +33,7 @@ function discordFormatter(info) {
     // All slack responses start with the heading level and where the message came from.
     let formattedResponse = {
       // If the bot contains an identifier flag it should be included in the heading.
-      blocks: [
-        {
-          type: "section",
-          text: {
-            text: `[${info.level}] *${info["bot-identifier"]}* (${info.at})⭢${info.message}\n`,
-          },
-        },
-      ],
+      content: `[${info.level}] *${info["bot-identifier"]}* (${info.at})⭢${info.message}\n`;
     };
     // All messages from winston come in as a Json object. The loop below expands this object and adds mrkdwn sections
     // for each key value pair with a bullet point. If the section is an object then it was passed containing multiple
@@ -53,90 +46,49 @@ function discordFormatter(info) {
       // If the key is `mrkdwn` then simply return only the markdown as the txt object. This assumes all formatting has
       // been applied in the bot itself. For example the monitor bots which conform to strict formatting rules.
       if (key == "mrkdwn") {
-        formattedResponse.blocks.push({
-          type: "section",
-          text: {
-            text: ` ${info[key]}`,
-          },
-        });
+        formattedResponse.content += ` ${info[key]}`;
       }
       // If the value in the message is an object then spread each key value pair within the object.
       else if (typeof info[key] === "object" && info[key] !== null) {
-        formattedResponse.blocks.push({
-          type: "section",
-          text: {
-            text: ` • _${key}_:\n`,
-          },
-        });
+        formattedResponse.content += ` • _${key}_:\n`;
         // For each key value pair within the object, spread the object out for formatting.
         for (const subKey in info[key]) {
           // If the length of the value is 66 then we know this is a transaction hash. Format accordingly.
           if (info[key][subKey].length == 66) {
-            formattedResponse.blocks[
-              formattedResponse.blocks.length - 1
-            ].text.text += `    - _tx_: ${createEtherscanLinkMarkdown(info[key][subKey])}\n`;
+            formattedResponse.content += `    - _tx_: ${createEtherscanLinkMarkdown(info[key][subKey])}\n`;
           }
           // If the length of the value is 42 then we know this is an address. Format accordingly.
           else if (info[key][subKey].length == 42) {
-            formattedResponse.blocks[
-              formattedResponse.blocks.length - 1
-            ].text.text += `    - _${subKey}_: ${createEtherscanLinkMarkdown(info[key][subKey])}\n`;
+            formattedResponse.content += `    - _${subKey}_: ${createEtherscanLinkMarkdown(info[key][subKey])}\n`;
           }
           // If the value within the object itself is an object we dont want to spread it any further. Rather,
           // convert the object to a string and print it along side it's key value pair.
           else if (typeof info[key][subKey] === "object" && info[key][subKey] !== null) {
-            formattedResponse.blocks.push({
-              type: "section",
-              text: {
-                text: `    - _${subKey}_: ${JSON.stringify(info[key][subKey])}\n`,
-              },
-            });
+            formattedResponse.content += `    - _${subKey}_: ${JSON.stringify(info[key][subKey])}\n`;
+
             // Else if not a address, transaction or object then print as ` - key: value`
           } else {
-            formattedResponse.blocks.push({
-              type: "section",
-              text: {
-                text: `    - _${subKey}_: ${info[key][subKey]}\n`,
-              },
-            });
+            formattedResponse.content += `    - _${subKey}_: ${info[key][subKey]}\n`;
           }
         }
         // Else, if the input is not an object then print the values as key value pairs. First check for addresses or txs
       } else if (info[key]) {
         // like with the previous level, if there is a value that is a transaction or an address format accordingly
         if (info[key].length == 66) {
-          formattedResponse.blocks[
-            formattedResponse.blocks.length - 1
-          ].text.text += ` • _tx_: ${createEtherscanLinkMarkdown(info[key])}\n`;
+          formattedResponse.content += ` • _tx_: ${createEtherscanLinkMarkdown(info[key])}\n`;
         }
         // If the length of the value is 42 then we know this is an address. Format accordingly.
         else if (info[key].length == 42) {
-          formattedResponse.blocks[
-            formattedResponse.blocks.length - 1
-          ].text.text += ` • _${key}_: ${createEtherscanLinkMarkdown(info[key])}\n`;
+          formattedResponse.content += ` • _${key}_: ${createEtherscanLinkMarkdown(info[key])}\n`;
         } else {
-          formattedResponse.blocks.push({
-            type: "section",
-            text: {
-              text: ` • _${key}_: ${info[key]}\n`,
-            },
-          });
+          formattedResponse.content += ` • _${key}_: ${info[key]}\n`;
         }
         // Else, if the value from the key value pair is null still show the key in the log. For example if a param is
         // logged but empty we still want to see the key.
       } else if (info[key] == null) {
-        formattedResponse.blocks.push({
-          type: "section",
-          text: {
-            text: ` • _${key}_: null`,
-          },
-        });
+        formattedResponse.content += ` • _${key}_: null`;
       }
     }
-    // Add a divider to the end of the message to help distinguish messages in long lists.
-    formattedResponse.blocks.push({
-      type: "divider",
-    });
     return formattedResponse;
   } catch (error) {
     return {
@@ -162,23 +114,18 @@ class DiscordHook extends Transport {
     this.level = opts.level || undefined;
     this.webhookUrl = opts.webhookUrl;
     this.formatter = opts.formatter || undefined;
-    this.mrkdwn = opts.mrkdwn || false;
 
     this.axiosInstance = axios.create({ proxy: opts.proxy || undefined });
   }
 
   async log(info, callback) {
-    let payload = {
-      mrkdwn: this.mrkdwn,
-    };
-
     let layout = this.formatter(info);
     payload.text = layout.text || undefined;
     payload.attachments = layout.attachments || undefined;
     payload.blocks = layout.blocks || undefined;
     let errorThrown = false;
     // If the overall payload is less than 3000 chars then we can send it all in one go to the slack API.
-    if (JSON.stringify(payload).length < 3000) {
+    if (JSON.stringify(payload).length < 2000) {
       let response = await this.axiosInstance.post(this.webhookUrl, payload);
       if (response.status != 200) errorThrown = true;
     } else {
