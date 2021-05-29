@@ -120,9 +120,8 @@ class DiscordHook extends Transport {
 
   async log(info, callback) {
     let layout = this.formatter(info);
-    payload.text = layout.text || undefined;
-    payload.attachments = layout.attachments || undefined;
-    payload.blocks = layout.blocks || undefined;
+    payload.content = layout.content || undefined;
+    payload.embeds = layout.embeds || undefined;
     let errorThrown = false;
     // If the overall payload is less than 3000 chars then we can send it all in one go to the slack API.
     if (JSON.stringify(payload).length < 2000) {
