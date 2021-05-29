@@ -75,11 +75,11 @@ function discordFormatter(info) {
       } else if (info[key]) {
         // like with the previous level, if there is a value that is a transaction or an address format accordingly
         if (info[key].length == 66) {
-          formattedResponse.content += ` • _tx_: ${createEtherscanLinkMarkdown(info[key])}\n`;
+          formattedResponse.content += `    - _tx_: [${info[key]}](<${createEtherscanLinkFromtx(1)}tx/${info[key]}>)\n`;
         }
         // If the length of the value is 42 then we know this is an address. Format accordingly.
         else if (info[key].length == 42) {
-          formattedResponse.content += ` • _${key}_: ${createEtherscanLinkMarkdown(info[key])}\n`;
+          formattedResponse.content += `    - _${key}_: [${info[key]}](<${createEtherscanLinkFromtx(1)}address/${info[key]}>)\n`;
         } else {
           formattedResponse.content += ` • _${key}_: ${info[key]}\n`;
         }
