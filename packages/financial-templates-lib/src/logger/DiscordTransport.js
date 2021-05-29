@@ -55,11 +55,11 @@ function discordFormatter(info) {
         for (const subKey in info[key]) {
           // If the length of the value is 66 then we know this is a transaction hash. Format accordingly.
           if (info[key][subKey].length == 66) {
-            formattedResponse.content += `    - _tx_: <${createEtherscanLinkFromtx(1)}tx/${info[key][subKey]}>\n`;
+            formattedResponse.content += `    - _tx_: [${info[key][subKey]}](<${createEtherscanLinkFromtx(1)}tx/${info[key][subKey]}>)\n`;
           }
           // If the length of the value is 42 then we know this is an address. Format accordingly.
           else if (info[key][subKey].length == 42) {
-            formattedResponse.content += `    - _${subKey}_: <${createEtherscanLinkFromtx(1)}address/${info[key][subKey]}>\n`;
+            formattedResponse.content += `    - _${subKey}_: [${info[key][subKey]}](<${createEtherscanLinkFromtx(1)}address/${info[key][subKey]}>)\n`;
           }
           // If the value within the object itself is an object we dont want to spread it any further. Rather,
           // convert the object to a string and print it along side it's key value pair.
